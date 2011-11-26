@@ -113,7 +113,6 @@ file_logger(LogNameFormat) ->
 
 append_to_binary_log_file(Bin, ConnN, From, LogNameFormat) ->
     LogName = io_lib:format(LogNameFormat, [From, ConnN]),
-    io:format("~s~n", [LogName]),
     {ok, File} = file:open(LogName, [write, append, binary, raw]),
     file:write(File, Bin),
     file:close(File).
