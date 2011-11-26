@@ -40,6 +40,15 @@ peer_info(Socket) -> format_socket_info(inet:peername(Socket)).
 
 socket_info(Socket) -> format_socket_info(inet:sockname(Socket)).
 
+format_date_time({{Y, M, D}, {H, MM, S}}) ->
+    lists:flatten(
+       io_lib:format("~4.10.0B.~2.10.0B.~2.10.0B-~2.10.0B.~2.10.0B.~2.10.0B", 
+                     [Y, M, D, H, MM, S])).
+
+format_duration({Days, {H, M, S}}) ->
+    lists:flatten(
+       io_lib:format("~2.10.0B-~2.10.0B.~2.10.0B.~2.10.0B", [Days, H, M, S])).
+  
 acceptor(ListenSocket, RemoteHost, RemotePort, ConnN) ->
     case gen_tcp:accept(ListenSocket) of
       {ok, LocalSocket} -> 
@@ -49,9 +58,15 @@ acceptor(ListenSocket, RemoteHost, RemotePort, ConnN) ->
           case gen_tcp:connect(RemoteHost, RemotePort, [binary, {packet, 0}]) of
             {ok, RemoteSocket} ->
               RemoteInfo = peer_info(RemoteSocket),
-              logger ! {message, "~4.10.0B: Connected to ~s~n", [ConnN, RemoteInfo], ConnN},
+              StartTime = calendar:local_time(),
+              logger ! {message, "~4.10.0B: Connected to ~s at ~s~n", 
+                        [ConnN, RemoteInfo, format_date_time(StartTime)], ConnN},
               exchange_data(LocalSocket, RemoteSocket, LocalInfo, RemoteInfo, ConnN, 0),
-              logger ! {message, "~4.10.0B: Finished~n", [ConnN], ConnN};
+              EndTime = calendar:local_time(),
+              Duration = calendar:time_difference(StartTime, EndTime),
+              logger ! {message, "~4.10.0B: Finished at ~s, duration ~s~n", 
+                        [ConnN, format_date_time(EndTime), 
+                         format_duration(Duration)], ConnN};
             {error, Reason} ->
               logger ! {message, "~4.10.0B: Unable to connect to ~s:~s (error: ~p)", 
                        [ConnN, RemoteHost, RemotePort, Reason], ConnN}
