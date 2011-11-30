@@ -34,7 +34,7 @@ wait() -> receive _ -> true end, wait().
 
 format_socket_info(Info) ->
     {ok, {{A, B, C, D}, Port}} = Info,
-    lists:flatten(io_lib:format("~p.~p.~p.~p:~p", [A, B, C, D, Port])).
+    lists:flatten(io_lib:format("~p.~p.~p.~p-~p", [A, B, C, D, Port])).
 
 peer_info(Socket) -> format_socket_info(inet:peername(Socket)).
 
