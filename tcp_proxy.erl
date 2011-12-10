@@ -2,7 +2,7 @@
 % Copyright (c) 2011 by Alexander Demin
 
 -module(tcp_proxy).
--export([]).
+-export([main/1]).
 
 main([ListenPort, RemoteHost, RemotePort]) ->
      ListenPortN = list_to_integer(ListenPort),
