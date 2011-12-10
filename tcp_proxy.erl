@@ -215,7 +215,7 @@ append_message_to_file(Putter, LogName) ->
        
 % -----------------------------------------------------------------------------
 
--define(WIDTH, 32).
+-define(WIDTH, 16).
 
 binary_to_hex_via_printer(Bin, Printer) ->
     binary_to_hex(Bin, Printer, 0).
