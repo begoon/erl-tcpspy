@@ -6,7 +6,8 @@
 
 main([ListenPort, RemoteHost, RemotePort]) ->
      ListenPortN = list_to_integer(ListenPort),
-     start(ListenPortN, RemoteHost, list_to_integer(RemotePort));
+     RemotePortN = list_to_integer(RemotePort),
+     start(ListenPortN, RemoteHost, RemotePortN);
 
 main(_) -> usage().
 
