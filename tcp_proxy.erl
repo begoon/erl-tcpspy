@@ -13,8 +13,8 @@ main(_) -> usage().
 
 usage() ->
     io:format("~n~s local_port remote_port remote_host~n~n", [?FILE]),
-    io:format("Example:~n~n", []),
-    io:format("tcp_proxy.erl 50000 google.com 80~n~n", []).
+    io:format("Example:~n~n"),
+    io:format("tcp_proxy.erl 50000 google.com 80~n~n").
 
 start(ListenPort, CalleeHost, CalleePort) ->
     io:format("Start listening on port ~p and forwarding data to ~s:~p~n",
